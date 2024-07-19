@@ -6,6 +6,7 @@ import Link from '@mui/material/Link';
 import { useTheme } from '@mui/material/styles';
 
 import { RouterLink } from 'src/routes/components';
+import { Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -81,8 +82,11 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
   }
 
   return (
-    <Link component={RouterLink} href="/" sx={{ display: 'contents' }}>
-      {logo}
+    <Link component={RouterLink} href="/" sx={{ display: 'contents', mt: 2 }}>
+      <Typography sx={{ textAlign: 'center', mt: 2, mb: 2 }} variant="h5">
+        Business Card
+      </Typography>
+      {/* {logo} */}
     </Link>
   );
 });

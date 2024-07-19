@@ -97,10 +97,10 @@ export default function UserPage() {
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">User List</Typography>
+        <Typography variant="h4">Card List</Typography>
 
         <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
-          New User
+          Bulk Upload
         </Button>
       </Stack>
 
@@ -125,7 +125,10 @@ export default function UserPage() {
                   { id: 'name', label: 'Name' },
                   { id: 'company', label: 'Company' },
                   { id: 'department', label: 'Department' },
-                  { id: 'isVerified', label: 'Verified', align: 'center' },
+                  { id: 'designation', label: 'Designation' },
+                  { id: 'email', label: 'Email' },
+                  { id: 'qrcode', label: 'QrCode' },
+
                   { id: 'status', label: 'Status' },
                   { id: '' },
                 ]}

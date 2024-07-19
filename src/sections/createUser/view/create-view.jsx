@@ -3,9 +3,26 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-
-import { Grid, Card, Button, TextField, Container, Typography } from '@mui/material';
-
+import axios from "axios";
+import {
+  Grid,
+  Card,
+  Button,
+  TextField,
+  Container,
+  Typography,
+  InputAdornment,
+} from '@mui/material';
+import {
+  AccountCircle,
+  Email,
+  Phone,
+  Business,
+  LocationCity,
+  Public,
+  Home,
+} from '@mui/icons-material';
+import { toast } from "react-hot-toast";
 
 const validationSchema = Yup.object({
   firstName: Yup.string().required('First name is required'),
@@ -40,6 +57,24 @@ const MyForm = () => {
     },
     validationSchema,
     onSubmit: (values) => {
+      // axios
+      //   .post('http://10.201.0.188:5000/api/employee', values)
+      //   .then((res) => {
+      //     if (res.data.error) {
+      //       return toast.error(res.data.message);
+      //     } else {
+      //       console.log(res.data);
+      //       return toast.success(res.data.message);
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     if (error.response && error.response.data && error.response.data.message) {
+      //       toast.error(error.response.data.message);
+      //     } else {
+      //       toast.error('An unexpected error occurred');
+      //     }
+      //   });
+
       console.log(values);
     },
   });
@@ -49,7 +84,7 @@ const MyForm = () => {
       <Typography sx={{ mb: 5 }} variant="h4" gutterBottom>
         Raymonds Digital Business Card
       </Typography>
-      <Card sx={{ p: 3}}>
+      <Card sx={{ p: 3 }}>
         <form onSubmit={formik.handleSubmit}>
           <span>Generate digital business card as QR codes</span>
           <Grid sx={{ mb: 2, mt: 2 }} container spacing={2} gridRow={1}>
@@ -63,6 +98,13 @@ const MyForm = () => {
                 onChange={formik.handleChange}
                 error={formik.touched.firstName && Boolean(formik.errors.firstName)}
                 helperText={formik.touched.firstName && formik.errors.firstName}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
@@ -75,14 +117,17 @@ const MyForm = () => {
                 onChange={formik.handleChange}
                 error={formik.touched.lastName && Boolean(formik.errors.lastName)}
                 helperText={formik.touched.lastName && formik.errors.lastName}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
           </Grid>
           <Grid sx={{ mb: 2 }} container spacing={2} gridRow={1}>
-            {/* <Typography variant="h4" gutterBottom>
-            Organization Section
-          </Typography> */}
-
             <Grid item xs={12} sm={4}>
               <TextField
                 fullWidth
@@ -93,6 +138,13 @@ const MyForm = () => {
                 onChange={formik.handleChange}
                 error={formik.touched.companyName && Boolean(formik.errors.companyName)}
                 helperText={formik.touched.companyName && formik.errors.companyName}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Business />
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
@@ -119,6 +171,13 @@ const MyForm = () => {
                 onChange={formik.handleChange}
                 error={formik.touched.email && Boolean(formik.errors.email)}
                 helperText={formik.touched.email && formik.errors.email}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Email />
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
@@ -131,6 +190,13 @@ const MyForm = () => {
                 onChange={formik.handleChange}
                 error={formik.touched.phone && Boolean(formik.errors.phone)}
                 helperText={formik.touched.phone && formik.errors.phone}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Phone />
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
           </Grid>
@@ -145,6 +211,13 @@ const MyForm = () => {
                 onChange={formik.handleChange}
                 error={formik.touched.companyWebsite && Boolean(formik.errors.companyWebsite)}
                 helperText={formik.touched.companyWebsite && formik.errors.companyWebsite}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Public />
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
           </Grid>
@@ -159,6 +232,13 @@ const MyForm = () => {
                 onChange={formik.handleChange}
                 error={formik.touched.street && Boolean(formik.errors.street)}
                 helperText={formik.touched.street && formik.errors.street}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Home />
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
           </Grid>
@@ -173,6 +253,13 @@ const MyForm = () => {
                 onChange={formik.handleChange}
                 error={formik.touched.city && Boolean(formik.errors.city)}
                 helperText={formik.touched.city && formik.errors.city}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LocationCity />
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
@@ -223,11 +310,16 @@ const MyForm = () => {
           >
             Submit
           </Button>
-          <Button color="primary" variant="contained" type="submit" style={{ marginTop: '16px' }}>
+          <Button
+            color="primary"
+            variant="contained"
+            type="button"
+            onClick={formik.handleReset}
+            style={{ marginTop: '16px' }}
+          >
             Reset
           </Button>
         </form>
-        {/* <img width={300} height={300} src={Scan} alt="" /> */}
       </Card>
     </Container>
   );

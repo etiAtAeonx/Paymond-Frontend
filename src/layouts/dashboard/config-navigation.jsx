@@ -13,14 +13,14 @@ const navConfig = [
     icon: icon('ic_analytics'),
   },
   {
-    title: 'create user',
+    title: 'create card',
     path: '/create-user',
     icon: icon('ic_user'),
   },
   {
-    title: 'list user',
+    title: 'list card',
     path: '/user',
-    icon: icon('ic_analytics'),
+    icon: icon('ic_user'),
   },
 
   // {
