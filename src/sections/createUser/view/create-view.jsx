@@ -1,9 +1,6 @@
-/* eslint-disable import/no-unresolved */
-/* eslint-disable react/no-unknown-property */
-/* eslint-disable import/no-extraneous-dependencies */
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import axios from "axios";
+import axios from 'axios';
 import {
   Grid,
   Card,
@@ -22,21 +19,24 @@ import {
   Public,
   Home,
 } from '@mui/icons-material';
-import { toast } from "react-hot-toast";
+import { toast } from 'react-hot-toast';
 
 const validationSchema = Yup.object({
   firstName: Yup.string().required('First name is required'),
   lastName: Yup.string().required('Last name is required'),
-  companyName: Yup.string().required('Company name is required'),
-  departmentName: Yup.string().required('Department name is required'),
+  company: Yup.string().required('Company name is required'),
+  department: Yup.string().required('Department name is required'),
+  designation: Yup.string().required('Designation name is required'),
   email: Yup.string().email('Invalid email address').required('Email is required'),
   phone: Yup.string().required('Phone number is required'),
-  companyWebsite: Yup.string().url('Invalid URL').required('Company website is required'),
-  street: Yup.string().required('Street is required'),
-  city: Yup.string().required('City is required'),
-  zipcode: Yup.string().required('Zipcode is required'),
-  state: Yup.string().required('State is required'),
-  country: Yup.string().required('Country is required'),
+  company_url: Yup.string().url('Invalid URL').required('Company website is required'),
+  address: Yup.object({
+    street: Yup.string().required('Street is required'),
+    city: Yup.string().required('City is required'),
+    postalCode: Yup.string().required('Zipcode is required'),
+    state: Yup.string().required('State is required'),
+    country: Yup.string().required('Country is required'),
+  }),
 });
 
 const MyForm = () => {
@@ -44,38 +44,44 @@ const MyForm = () => {
     initialValues: {
       firstName: '',
       lastName: '',
-      companyName: '',
-      departmentName: '',
+      company: '',
+      department: '',
+      designation: '',
       email: '',
       phone: '',
-      companyWebsite: '',
-      street: '',
-      city: '',
-      zipcode: '',
-      state: '',
-      country: '',
+      company_url: '',
+      address: {
+        street: '',
+        city: '',
+        postalCode: '',
+        state: '',
+        country: '',
+      },
     },
     validationSchema,
     onSubmit: (values) => {
-      // axios
-      //   .post('http://10.201.0.188:5000/api/employee', values)
-      //   .then((res) => {
-      //     if (res.data.error) {
-      //       return toast.error(res.data.message);
-      //     } else {
-      //       console.log(res.data);
-      //       return toast.success(res.data.message);
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     if (error.response && error.response.data && error.response.data.message) {
-      //       toast.error(error.response.data.message);
-      //     } else {
-      //       toast.error('An unexpected error occurred');
-      //     }
-      //   });
-
-      console.log(values);
+      axios
+        .post(
+          'http://raymond-digibizcard-alb-239931124.ap-south-1.elb.amazonaws.com/api/employee',
+          values
+        )
+        .then((res) => {
+          if (res.data.error) {
+            return toast.error(res.data.message);
+          } else {
+            console.log(res.data);
+            formik.resetForm();
+            console.log(res.data.message);
+            return toast.success(res.data.message);
+          }
+        })
+        .catch((error) => {
+          if (error.response && error.response.data && error.response.data.message) {
+            toast.error(error.response.data.message);
+          } else {
+            toast.error('An unexpected error occurred');
+          }
+        });
     },
   });
 
@@ -131,13 +137,13 @@ const MyForm = () => {
             <Grid item xs={12} sm={4}>
               <TextField
                 fullWidth
-                id="companyName"
-                name="companyName"
+                id="company"
+                name="company"
                 label="Company Name"
-                value={formik.values.companyName}
+                value={formik.values.company}
                 onChange={formik.handleChange}
-                error={formik.touched.companyName && Boolean(formik.errors.companyName)}
-                helperText={formik.touched.companyName && formik.errors.companyName}
+                error={formik.touched.company && Boolean(formik.errors.company)}
+                helperText={formik.touched.company && formik.errors.company}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -150,13 +156,13 @@ const MyForm = () => {
             <Grid item xs={12} sm={4}>
               <TextField
                 fullWidth
-                id="departmentName"
-                name="departmentName"
+                id="department"
+                name="department"
                 label="Department Name"
-                value={formik.values.departmentName}
+                value={formik.values.department}
                 onChange={formik.handleChange}
-                error={formik.touched.departmentName && Boolean(formik.errors.departmentName)}
-                helperText={formik.touched.departmentName && formik.errors.departmentName}
+                error={formik.touched.department && Boolean(formik.errors.department)}
+                helperText={formik.touched.department && formik.errors.department}
               />
             </Grid>
           </Grid>
@@ -164,20 +170,13 @@ const MyForm = () => {
             <Grid item xs={12} sm={4}>
               <TextField
                 fullWidth
-                id="email"
-                name="email"
-                label="Email"
-                value={formik.values.email}
+                id="designation"
+                name="designation"
+                label="Designation"
+                value={formik.values.designation}
                 onChange={formik.handleChange}
-                error={formik.touched.email && Boolean(formik.errors.email)}
-                helperText={formik.touched.email && formik.errors.email}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Email />
-                    </InputAdornment>
-                  ),
-                }}
+                error={formik.touched.designation && Boolean(formik.errors.designation)}
+                helperText={formik.touched.designation && formik.errors.designation}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
@@ -204,13 +203,34 @@ const MyForm = () => {
             <Grid item xs={12} sm={8}>
               <TextField
                 fullWidth
-                id="companyWebsite"
-                name="companyWebsite"
-                label="Company Website"
-                value={formik.values.companyWebsite}
+                id="email"
+                name="email"
+                label="Email"
+                value={formik.values.email}
                 onChange={formik.handleChange}
-                error={formik.touched.companyWebsite && Boolean(formik.errors.companyWebsite)}
-                helperText={formik.touched.companyWebsite && formik.errors.companyWebsite}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Email />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+          </Grid>
+          <Grid sx={{ mb: 2 }} container spacing={2} gridRow={1}>
+            <Grid item xs={12} sm={8}>
+              <TextField
+                fullWidth
+                id="company_url"
+                name="company_url"
+                label="Company Website"
+                value={formik.values.company_url}
+                onChange={formik.handleChange}
+                error={formik.touched.company_url && Boolean(formik.errors.company_url)}
+                helperText={formik.touched.company_url && formik.errors.company_url}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -226,12 +246,12 @@ const MyForm = () => {
               <TextField
                 fullWidth
                 id="street"
-                name="street"
+                name="address.street"
                 label="Street"
-                value={formik.values.street}
+                value={formik.values.address.street}
                 onChange={formik.handleChange}
-                error={formik.touched.street && Boolean(formik.errors.street)}
-                helperText={formik.touched.street && formik.errors.street}
+                error={formik.touched.street && Boolean(formik.errors.address?.street)}
+                helperText={formik.touched.street && formik.errors.address?.street}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -247,12 +267,12 @@ const MyForm = () => {
               <TextField
                 fullWidth
                 id="city"
-                name="city"
+                name="address.city"
                 label="City"
-                value={formik.values.city}
+                value={formik.values.address.city}
                 onChange={formik.handleChange}
-                error={formik.touched.city && Boolean(formik.errors.city)}
-                helperText={formik.touched.city && formik.errors.city}
+                error={formik.touched.city && Boolean(formik.errors.address?.city)}
+                helperText={formik.touched.city && formik.errors.address?.city}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -265,13 +285,13 @@ const MyForm = () => {
             <Grid item xs={12} sm={4}>
               <TextField
                 fullWidth
-                id="zipcode"
-                name="zipcode"
+                id="postalCode"
+                name="address.postalCode"
                 label="Zipcode"
-                value={formik.values.zipcode}
+                value={formik.values.address.postalCode}
                 onChange={formik.handleChange}
-                error={formik.touched.zipcode && Boolean(formik.errors.zipcode)}
-                helperText={formik.touched.zipcode && formik.errors.zipcode}
+                error={formik.touched.postalCode && Boolean(formik.errors.address?.postalCode)}
+                helperText={formik.touched.postalCode && formik.errors.address?.postalCode}
               />
             </Grid>
           </Grid>
@@ -280,24 +300,24 @@ const MyForm = () => {
               <TextField
                 fullWidth
                 id="state"
-                name="state"
+                name="address.state"
                 label="State"
-                value={formik.values.state}
+                value={formik.values.address.state}
                 onChange={formik.handleChange}
-                error={formik.touched.state && Boolean(formik.errors.state)}
-                helperText={formik.touched.state && formik.errors.state}
+                error={formik.touched.state && Boolean(formik.errors.address?.state)}
+                helperText={formik.touched.state && formik.errors.address?.state}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
               <TextField
                 fullWidth
                 id="country"
-                name="country"
+                name="address.country"
                 label="Country"
-                value={formik.values.country}
+                value={formik.values.address.country}
                 onChange={formik.handleChange}
-                error={formik.touched.country && Boolean(formik.errors.country)}
-                helperText={formik.touched.country && formik.errors.country}
+                error={formik.touched.country && Boolean(formik.errors.address?.country)}
+                helperText={formik.touched.country && formik.errors.address?.country}
               />
             </Grid>
           </Grid>
