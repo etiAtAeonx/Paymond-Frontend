@@ -62,7 +62,7 @@ const MyForm = () => {
     onSubmit: (values) => {
       axios
         .post(
-          'http://raymond-digibizcard-alb-239931124.ap-south-1.elb.amazonaws.com/api/employee',
+          'https://d29ujvr1u9v7px.cloudfront.net/api/employee',
           values
         )
         .then((res) => {
